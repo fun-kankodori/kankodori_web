@@ -127,26 +127,90 @@ export const SearchCard = ({
 
       {/* Range Slider */}
       <div className="mb-6 sm:mb-8">
-        <div className="text-center mb-3 sm:mb-4">
+        <div className="text-center mb-4 sm:mb-6">
           <label className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
             検索の重み付け
           </label>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+            テキスト重視 ← → 画像重視
+          </p>
         </div>
-        <div className="flex items-center gap-2 sm:gap-4">
-          <span className="text-xs sm:text-sm font-medium text-gray-600 whitespace-nowrap">
-            テキスト {100 - range}%
-          </span>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={range}
-            onChange={(e) => setRange(Number(e.target.value))}
-            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-          />
-          <span className="text-xs sm:text-sm font-medium text-gray-600 whitespace-nowrap">
-            画像 {range}%
-          </span>
+
+        <div className="max-w-sm mx-auto">
+          {/* スライダー本体 */}
+          <div className="relative px-3">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="20"
+              value={range}
+              onChange={(e) => setRange(Number(e.target.value))}
+              className="w-full h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full appearance-none cursor-pointer slider-modern"
+              style={{
+                background: `linear-gradient(to right, #3b82f6 100%, #3b82f6 ${range}%, #8b5cf6 ${range}%, #8b5cf6 100%)`,
+              }}
+            />
+
+            {/* カスタムスライダーのスタイル */}
+            <style jsx>{`
+              .slider-modern::-webkit-slider-thumb {
+                appearance: none;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: white;
+                border: 3px solid #6366f1;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                transition: all 0.2s ease;
+              }
+              .slider-modern::-webkit-slider-thumb:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+              }
+              .slider-modern::-moz-range-thumb {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: white;
+                border: 3px solid #6366f1;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+              }
+            `}</style>
+
+            {/* 段階表示 */}
+            <div className="flex justify-between mt-3 px-1">
+              {[0, 20, 40, 60, 80, 100].map((value) => (
+                <button
+                  key={value}
+                  onClick={() => setRange(value)}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    range === value
+                      ? "bg-indigo-500 scale-150"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* 現在の値表示 */}
+          <div className="mt-4 bg-gray-50 rounded-lg p-3">
+            <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                <span className="font-medium">テキスト</span>
+                <span className="text-gray-600 font-mono">{100 - range}%</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-600 font-mono">{range}%</span>
+                <span className="font-medium">画像</span>
+                <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
